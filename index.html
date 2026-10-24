@@ -3,14 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Game</title>
+    <meta name="theme-color" content="#071018">
+    <title>Wordwave — A Typing Defense Game</title>
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div id="gameArea">
-        <div id="spaceship"></div>
-        <div id="wordContainer"></div>
-    </div>
+    <main class="app-shell">
+        <section class="game-frame" aria-label="Wordwave game">
+            <canvas id="gameCanvas" width="480" height="720" tabindex="0" aria-label="Wordwave playfield"></canvas>
+
+            <header id="hud" class="hud" hidden aria-live="polite">
+                <div class="hud-top">
+                    <div class="hud-stat">
+                        <span class="hud-label">Score</span>
+                        <strong id="scoreValue">0</strong>
+                    </div>
+                    <div class="hud-stat hud-stat-center">
+                        <span class="hud-label">Wave</span>
+                        <strong id="waveValue">1</strong>
+                    </div>
+                    <div class="hud-stat hud-stat-right">
+                        <span class="hud-label">Hull</span>
+                        <strong id="livesValue">3</strong>
+                    </div>
+                </div>
+                <div class="hud-bottom">
+                    <span>Accuracy <strong id="accuracyValue">100%</strong></span>
+                    <span>Streak <strong id="streakValue">0</strong></span>
+                    <button class="icon-button" type="button" data-action="pause" aria-label="Pause game">Ⅱ</button>
+                </div>
+            </header>
+
+            <section id="titleScreen" class="screen title-screen" aria-labelledby="gameTitle">
+                <div class="title-content">
+                    <p class="eyebrow">A KEYBOARD ARCADE</p>
+                    <h1 id="gameTitle">WORDWAVE</h1>
+                    <p class="tagline">Type fast. Hold the line.</p>
+                    <div class="menu-actions">
+                        <button class="button button-primary" type="button" data-action="start">New game</button>
+                        <button class="button button-secondary" type="button" data-action="settings">Settings</button>
+                        <button class="button button-secondary" type="button" data-action="stats">My stats</button>
+                        <button class="button button-text" type="button" data-action="custom">Use your own words</button>
+                    </div>
+                    <p class="control-hint">Type the first letter of a target to lock on, then finish the word.</p>
+                </div>
+            </section>
+
+            <section id="pauseScreen" class="screen modal-screen" aria-labelledby="pauseTitle" hidden>
+                <div class="panel">
+                    <p class="eyebrow">TAKE A BREATH</p>
+                    <h2 id="pauseTitle">Game paused</h2>
+                    <p class="panel-copy">Your wave is waiting.</p>
+                    <div class="menu-actions">
+                        <button class="button button-primary" type="button" data-action="resume">Resume</button>
+                        <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="settingsScreen" class="screen modal-screen" aria-labelledby="settingsTitle" hidden>
+                <div class="panel">
+                    <p class="eyebrow">TUNE YOUR FLIGHT</p>
+                    <h2 id="settingsTitle">Settings</h2>
+                    <label class="setting-control" for="soundVolume">
+                        <span>Sound <output id="soundValue">50%</output></span>
+                        <input id="soundVolume" type="range" min="0" max="100" value="50">
+                    </label>
+                    <label class="setting-control" for="musicVolume">
+                        <span>Music <output id="musicValue">15%</output></span>
+                        <input id="musicVolume" type="range" min="0" max="100" value="0">
+                    </label>
+                    <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                </div>
+            </section>
+
+            <section id="statsScreen" class="screen modal-screen" aria-labelledby="statsTitle" hidden>
+                <div class="panel">
+                    <p class="eyebrow">YOUR FLIGHT RECORD</p>
+                    <h2 id="statsTitle">My stats</h2>
+                    <dl class="stats-list">
+                        <div><dt>Best score</dt><dd id="bestScoreValue">0</dd></div>
+                        <div><dt>Best wave</dt><dd id="bestWaveValue">0</dd></div>
+                        <div><dt>Games played</dt><dd id="gamesPlayedValue">0</dd></div>
+                        <div><dt>Longest streak</dt><dd id="bestStreakValue">0</dd></div>
+                    </dl>
+                    <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                </div>
+            </section>
+
+            <section id="customScreen" class="screen modal-screen" aria-labelledby="customTitle" hidden>
+                <div class="panel">
+                    <p class="eyebrow">MAKE IT YOURS</p>
+                    <h2 id="customTitle">Your word list</h2>
+                    <label class="custom-label" for="customWords">Enter words separated by spaces or new lines.</label>
+                    <textarea id="customWords" rows="5" maxlength="2000" placeholder="comet&#10;starlight&#10;galaxy"></textarea>
+                    <p id="customError" class="form-error" role="alert" hidden></p>
+                    <div class="menu-actions">
+                        <button class="button button-primary" type="button" data-action="start-custom">Start with these words</button>
+                        <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="gameOverScreen" class="screen modal-screen" aria-labelledby="gameOverTitle" hidden>
+                <div class="panel game-over-panel">
+                    <p class="eyebrow">FLIGHT COMPLETE</p>
+                    <h2 id="gameOverTitle">Game over</h2>
+                    <div class="result-grid">
+                        <div><span>Final score</span><strong id="finalScoreValue">0</strong></div>
+                        <div><span>Wave reached</span><strong id="finalWaveValue">1</strong></div>
+                        <div><span>Accuracy</span><strong id="finalAccuracyValue">100%</strong></div>
+                        <div><span>Longest streak</span><strong id="finalStreakValue">0</strong></div>
+                    </div>
+                    <p id="personalBestMessage" class="personal-best" hidden>New personal best!</p>
+                    <div class="menu-actions">
+                        <button class="button button-primary" type="button" data-action="start">Play again</button>
+                        <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                    </div>
+                </div>
+            </section>
+
+            <label id="touchEntry" class="touch-entry" for="touchInput" hidden>
+                <span class="visually-hidden">Type a target word</span>
+                <input id="touchInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Tap here to type">
+            </label>
+        </section>
+    </main>
     <script src="index.js"></script>
 </body>
 </html>
