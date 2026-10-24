@@ -24,16 +24,22 @@
                         <strong id="waveValue">1</strong>
                     </div>
                     <div class="hud-stat hud-stat-right">
-                        <span class="hud-label">Hull</span>
+                        <span class="hud-label">❤️</span>
                         <strong id="livesValue">3</strong>
                     </div>
                 </div>
                 <div class="hud-bottom">
                     <span>Accuracy <strong id="accuracyValue">100%</strong></span>
-                    <span>Streak <strong id="streakValue">0</strong></span>
-                    <button class="icon-button" type="button" data-action="pause" aria-label="Pause game">Ⅱ</button>
+                    <div class="hud-controls-right">
+                        <span>Streak <strong id="streakValue">0</strong></span>
+                        <button class="icon-button hud-menu-button" type="button" data-action="loadout" aria-label="Change weapons">⚙</button>
+                        <button class="icon-button hud-menu-button" type="button" data-action="settings" aria-label="Audio settings">♪</button>
+                        <button class="icon-button" type="button" data-action="pause" aria-label="Pause game">Ⅱ</button>
+                    </div>
                 </div>
             </header>
+
+            <div class="creator-tag" aria-label="Created by Prem Kumar Modi"><span>Prem Kumar</span><span class="creator-surname">Modi</span></div>
 
             <section id="titleScreen" class="screen title-screen" aria-labelledby="gameTitle">
                 <div class="title-content">
@@ -42,11 +48,94 @@
                     <p class="tagline">Type fast. Hold the line.</p>
                     <div class="menu-actions">
                         <button class="button button-primary" type="button" data-action="start">New game</button>
+                        <button class="button button-secondary" type="button" data-action="ships">Customize spaceship</button>
                         <button class="button button-secondary" type="button" data-action="settings">Settings</button>
                         <button class="button button-secondary" type="button" data-action="stats">My stats</button>
                         <button class="button button-text" type="button" data-action="custom">Use your own words</button>
                     </div>
                     <p class="control-hint">Type the first letter of a target to lock on, then finish the word.</p>
+                </div>
+            </section>
+
+            <section id="shipsScreen" class="screen modal-screen" aria-labelledby="shipsTitle" hidden>
+                <div class="panel ship-panel">
+                    <p class="eyebrow">MAKE IT YOURS</p>
+                    <h2 id="shipsTitle">Choose your ship</h2>
+                    <p class="panel-copy">Your selection is saved for your next flight.</p>
+                    <div id="shipChoices" class="ship-choices" role="group" aria-label="Spaceship designs">
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="interceptor" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="interceptor" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">Interceptor</span>
+                            <span class="ship-choice-detail">Balanced defender</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="scout" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="scout" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">Scout</span>
+                            <span class="ship-choice-detail">Swift and nimble</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="guardian" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="guardian" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">Guardian</span>
+                            <span class="ship-choice-detail">Heavy hull</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="comet" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="comet" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">Comet</span>
+                            <span class="ship-choice-detail">Deep-space runner</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="garuda-x" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="garuda-x" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">GARUDA X</span>
+                            <span class="ship-choice-detail" data-ship-status="garuda-x">Loading image...</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="pushpaka-prime" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="pushpaka-prime" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">PUSHPAKA PRIME</span>
+                            <span class="ship-choice-detail" data-ship-status="pushpaka-prime">Loading image...</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="ratha-01" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="ratha-01" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">RATHA 01</span>
+                            <span class="ship-choice-detail" data-ship-status="ratha-01">Loading image...</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="tejas-x" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="tejas-x" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">TEJAS-X</span>
+                            <span class="ship-choice-detail" data-ship-status="tejas-x">Loading image...</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="vajra-9" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="vajra-9" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">VAJRA-9</span>
+                            <span class="ship-choice-detail" data-ship-status="vajra-9">Loading image...</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="vyoma-01" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="vyoma-01" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">VYOMA-01</span>
+                            <span class="ship-choice-detail" data-ship-status="vyoma-01">Loading image...</span>
+                        </button>
+                        <button class="ship-choice" type="button" data-action="select-ship" data-ship="spyrox" aria-pressed="false">
+                            <canvas class="ship-preview" width="120" height="100" data-ship-preview="spyrox" aria-hidden="true"></canvas>
+                            <span class="ship-choice-name">SPYROX</span>
+                            <span class="ship-choice-detail" data-ship-status="vyoma-01">Loading image...</span>
+                        </button>
+                    </div>
+                    <h3 class="loadout-heading">Projectile animation</h3>
+                    <p class="panel-copy">Choose a weapon visual. Shots keep your current targeting and impact behavior.</p>
+                    <div id="weaponChoices" class="weapon-grid" role="group" aria-label="Projectile animations">
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="laser" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="laser" aria-hidden="true"></canvas><span class="weapon-choice-name">Laser Bolts</span><span class="weapon-choice-detail">Twin pulsed light bolts</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="plasma" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="plasma" aria-hidden="true"></canvas><span class="weapon-choice-name">Plasma Blast</span><span class="weapon-choice-detail">Glowing plasma orb</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="particle" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="particle" aria-hidden="true"></canvas><span class="weapon-choice-name">Particle Beam</span><span class="weapon-choice-detail">Crackling particle beam</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="ion" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="ion" aria-hidden="true"></canvas><span class="weapon-choice-name">Ion Cannon</span><span class="weapon-choice-detail">EMP energy sphere</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="rail" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="rail" aria-hidden="true"></canvas><span class="weapon-choice-name">Railgun</span><span class="weapon-choice-detail">Hyper-velocity rail shot</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="flak" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="flak" aria-hidden="true"></canvas><span class="weapon-choice-name">Flak Shell</span><span class="weapon-choice-detail">Explosive flak shell</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="torpedo" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="torpedo" aria-hidden="true"></canvas><span class="weapon-choice-name">Photon Torpedo</span><span class="weapon-choice-detail">Guided photon torpedo</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="swarm" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="swarm" aria-hidden="true"></canvas><span class="weapon-choice-name">Swarm Missiles</span><span class="weapon-choice-detail">Spiraling missile salvo</span></button>
+                        <button class="weapon-choice" type="button" data-action="select-weapon" data-weapon="singularity" aria-pressed="false"><canvas class="weapon-preview" width="120" height="48" data-weapon-preview="singularity" aria-hidden="true"></canvas><span class="weapon-choice-name">Singularity</span><span class="weapon-choice-detail">Gravity-warping black hole</span></button>
+                    </div>
+                    <div class="loadout-actions">
+                        <button class="button button-secondary" type="button" data-action="settings">Audio settings</button>
+                        <button class="button button-secondary" type="button" data-action="menu-back">Back</button>
+                    </div>
                 </div>
             </section>
 
@@ -66,15 +155,62 @@
                 <div class="panel">
                     <p class="eyebrow">TUNE YOUR FLIGHT</p>
                     <h2 id="settingsTitle">Settings</h2>
-                    <label class="setting-control" for="soundVolume">
-                        <span>Sound <output id="soundValue">50%</output></span>
-                        <input id="soundVolume" type="range" min="0" max="100" value="50">
+                    <label class="setting-control" for="masterVolume">
+                        <span>Master volume <output id="masterVolumeValue">100%</output></span>
+                        <input id="masterVolume" type="range" min="0" max="100" value="100">
                     </label>
-                    <label class="setting-control" for="musicVolume">
-                        <span>Music <output id="musicValue">15%</output></span>
-                        <input id="musicVolume" type="range" min="0" max="100" value="0">
+                    <div class="audio-setting">
+                        <label class="setting-control" for="musicVolume">
+                            <span>Background music <output id="musicValue">35%</output></span>
+                            <input id="musicVolume" type="range" min="0" max="100" value="35">
+                        </label>
+                        <label class="audio-toggle" for="musicEnabled">
+                            <input id="musicEnabled" type="checkbox" checked>
+                            <span id="musicEnabledLabel">Music on</span>
+                        </label>
+                    </div>
+                    <div class="audio-setting">
+                        <label class="setting-control" for="soundEffectsVolume">
+                            <span>Sound effects <output id="soundEffectsValue">60%</output></span>
+                            <input id="soundEffectsVolume" type="range" min="0" max="100" value="60">
+                        </label>
+                        <label class="audio-toggle" for="soundEffectsEnabled">
+                            <input id="soundEffectsEnabled" type="checkbox" checked>
+                            <span id="soundEffectsEnabledLabel">Sound effects on</span>
+                        </label>
+                    </div>
+                    <label class="audio-source-setting" for="shootSound">
+                        <span>Shooting sound</span>
+                        <select id="shootSound">
+                            <option value="bullet-01">Bullet sound 01</option>
+                            <option value="bullet-02">Bullet sound 02</option>
+                        </select>
                     </label>
-                    <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                    <label class="audio-source-setting" for="hitSound">
+                        <span>Hit sound</span>
+                        <select id="hitSound">
+                            <option value="bullet-01">Bullet sound 01</option>
+                            <option value="bullet-02">Bullet sound 02</option>
+                        </select>
+                    </label>
+                    <label class="audio-source-setting" for="backgroundMusic">
+                        <span>Background music</span>
+                        <select id="backgroundMusic">
+                            <option value="background-01">Background music 01</option>
+                        </select>
+                    </label>
+                    <fieldset class="shooting-setting">
+                        <legend>Shooting method</legend>
+                        <label>
+                            <input type="radio" name="shootingMethod" value="standard">
+                            <span>Standard — single shot (default)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="shootingMethod" value="garuda-x">
+                            <span>GARUDA X — twin bolts</span>
+                        </label>
+                    </fieldset>
+                    <button class="button button-secondary" type="button" data-action="menu-back">Back</button>
                 </div>
             </section>
 

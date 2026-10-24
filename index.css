@@ -9,6 +9,7 @@
     --amber: #ffb44a;
     --muted: #8aa0a5;
     --panel: rgba(6, 16, 23, 0.9);
+    --hud-rail-width: clamp(164px, 19vw, 228px);
 }
 
 * {
@@ -28,6 +29,57 @@ body {
     min-height: 100dvh;
     overflow: hidden;
     background: radial-gradient(ellipse at 50% 42%, #10232d 0, #08121a 45%, #04080d 100%);
+}
+/* ===== Creator name tag (top-left) – add to the end of index.css ===== */
+.creator-tag {
+    position: absolute;
+    top: max(10px, env(safe-area-inset-top));
+    left: 12px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 10px;
+    font: 700 11px/1 "Trebuchet MS", "Segoe UI", sans-serif;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #dff7f4;
+    background: rgba(5, 10, 17, 0.62);
+    border: 1px solid rgba(88, 240, 207, 0.32);
+    border-left: 3px solid #58f0cf;
+    border-radius: 4px;
+    box-shadow: 0 0 14px rgba(88, 240, 207, 0.18);
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.creator-tag::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: #ffb44a;
+    box-shadow: 0 0 8px #ffb44a;
+    transform: rotate(45deg);
+}
+
+.creator-tag .creator-surname {
+    color: #58f0cf;
+    text-shadow: 0 0 10px rgba(88, 240, 207, 0.6);
+}
+
+/* hidden while playing so it never covers the Score in the HUD */ /*currently not hidden*/
+#hud:not([hidden]) ~ .creator-tag {
+    display: block;
+}
+
+@media (max-width: 420px) {
+    .creator-tag {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        padding: 5px 9px 5px 8px;
+    }
 }
 
 button,
@@ -57,20 +109,29 @@ button {
 
 #gameCanvas {
     position: absolute;
-    inset: 0;
+    inset: 0 var(--hud-rail-width) 0 0;
     display: block;
-    width: 100%;
+    width: calc(100% - var(--hud-rail-width));
     height: 100%;
 }
 
 .hud {
     position: absolute;
     z-index: 2;
-    inset: 0 0 auto;
-    padding: clamp(12px, 4vw, 24px);
+    inset: 0 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: var(--hud-rail-width);
+    padding: 14px 12px;
+    border-left: 1px solid rgba(88, 240, 207, 0.22);
+    background:
+        linear-gradient(155deg, rgba(15, 36, 43, 0.96), rgba(5, 13, 21, 0.98) 54%),
+        var(--panel);
+    box-shadow: -12px 0 32px rgba(0, 0, 0, 0.24), inset 1px 0 rgba(225, 255, 249, 0.035);
     color: #d9efeb;
     pointer-events: none;
-    text-shadow: 0 2px 7px #061018;
+    text-shadow: 0 1px 5px #061018;
 }
 
 .hud[hidden] {
@@ -79,57 +140,98 @@ button {
 
 .hud-top,
 .hud-bottom {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    gap: 8px;
 }
 
 .hud-stat {
     display: grid;
-    gap: 2px;
-    min-width: 72px;
+    gap: 3px;
+    min-width: 0;
+    padding: 10px 11px;
+    border: 1px solid rgba(148, 203, 201, 0.16);
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(25, 53, 60, 0.62), rgba(7, 18, 26, 0.74));
+    box-shadow: inset 0 1px rgba(232, 255, 251, 0.035);
 }
 
 .hud-stat-center {
-    text-align: center;
+    text-align: left;
 }
 
 .hud-stat-right {
-    text-align: right;
+    text-align: left;
 }
 
 .hud-label,
 .hud-bottom {
     color: #a4b8b8;
-    font-size: clamp(0.68rem, 2.6vw, 0.85rem);
-    letter-spacing: 0.08em;
+    font-size: 0.68rem;
+    letter-spacing: 0.11em;
     text-transform: uppercase;
 }
 
 .hud-stat strong {
     color: var(--mint);
-    font-size: clamp(1.25rem, 5vw, 1.8rem);
-    font-weight: 500;
+    font-size: clamp(1.3rem, 2.4vw, 1.65rem);
+    line-height: 1.1;
+    font-weight: 600;
 }
 
 .hud-bottom {
-    align-items: center;
-    gap: 12px;
-    margin-top: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: auto;
+}
+
+.hud-controls-right {
+    display: contents;
+}
+
+.hud-bottom > span,
+.hud-controls-right > span {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    min-height: 56px;
+    padding: 8px 9px;
+    border: 1px solid rgba(148, 203, 201, 0.16);
+    border-radius: 8px;
+    background: rgba(17, 38, 45, 0.72);
+}
+
+.hud-bottom > span:first-child {
+    grid-column: 1 / -1;
+}
+
+.hud-controls-right .icon-button {
+    width: 100%;
+    height: 38px;
+    margin: 0;
+    border-color: rgba(88, 240, 207, 0.2);
+    border-radius: 8px;
+    background: rgba(12, 29, 36, 0.92);
+    color: #c8f7ec;
+    transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.hud-controls-right .icon-button:hover,
+.hud-controls-right .icon-button:focus-visible {
+    border-color: rgba(88, 240, 207, 0.62);
+    background: rgba(24, 57, 62, 0.96);
 }
 
 .hud-bottom strong {
     color: #f1faf7;
-    font-size: 0.95rem;
+    font-size: 1rem;
     letter-spacing: normal;
 }
 
 .icon-button {
-    width: 38px;
-    height: 38px;
-    margin: -4px 0 0;
     border: 1px solid rgba(183, 218, 215, 0.35);
-    border-radius: 50%;
+    border-radius: 8px;
     background: rgba(5, 13, 19, 0.65);
     color: #effbf8;
     cursor: pointer;
@@ -289,6 +391,156 @@ textarea:focus-visible {
     margin-top: 24px;
 }
 
+.ship-panel {
+    width: min(100%, 760px);
+}
+
+.ship-choices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.ship-choice {
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 9px 7px 11px;
+    border: 1px solid rgba(165, 193, 195, 0.2);
+    border-radius: 5px;
+    background: rgba(20, 40, 47, 0.35);
+    color: #d0dfdf;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.ship-choice:hover,
+.ship-choice:focus-visible {
+    border-color: rgba(88, 240, 207, 0.65);
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.ship-choice[aria-pressed="true"] {
+    border-color: var(--mint);
+    background: rgba(88, 240, 207, 0.12);
+    box-shadow: inset 0 0 18px rgba(88, 240, 207, 0.08);
+}
+
+.ship-preview {
+    display: block;
+    width: 100%;
+    max-width: 120px;
+    height: 84px;
+}
+
+.ship-choice-name {
+    color: #f0faf8;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.ship-choice-detail {
+    color: #91a8aa;
+    font-size: 0.7rem;
+}
+
+.loadout-heading {
+    margin: 24px 0 4px;
+    color: var(--mint);
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.weapon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+    margin: 16px 0;
+}
+
+.weapon-choice {
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 7px;
+    border: 1px solid rgba(165, 193, 195, 0.2);
+    border-radius: 5px;
+    background: rgba(20, 40, 47, 0.35);
+    color: #d0dfdf;
+    cursor: pointer;
+    text-align: center;
+}
+
+.weapon-choice:hover,
+.weapon-choice:focus-visible {
+    border-color: rgba(88, 240, 207, 0.65);
+    outline: none;
+}
+
+.weapon-choice[aria-pressed="true"] {
+    border-color: var(--mint);
+    background: rgba(88, 240, 207, 0.12);
+    box-shadow: inset 0 0 18px rgba(88, 240, 207, 0.08);
+}
+
+.weapon-preview {
+    display: block;
+    width: 100%;
+    max-width: 120px;
+    height: 48px;
+}
+
+.weapon-choice-name {
+    color: #f0faf8;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.weapon-choice-detail {
+    color: #91a8aa;
+    font-size: 0.67rem;
+}
+
+.loadout-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.shooting-setting {
+    display: grid;
+    gap: 9px;
+    margin: 22px 0;
+    padding: 12px;
+    border: 1px solid rgba(165, 193, 195, 0.2);
+    color: #c7d8d8;
+    text-align: left;
+}
+
+.shooting-setting legend {
+    padding: 0 6px;
+    color: var(--mint);
+}
+
+.shooting-setting label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.shooting-setting input {
+    accent-color: var(--mint);
+}
+
 .setting-control {
     display: grid;
     gap: 10px;
@@ -311,6 +563,53 @@ textarea:focus-visible {
 .setting-control input {
     width: 100%;
     accent-color: var(--mint);
+}
+
+.audio-setting {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 12px;
+}
+
+.audio-setting .setting-control {
+    min-width: 0;
+    margin: 8px 0;
+}
+
+.audio-toggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #c7d8d8;
+    cursor: pointer;
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.audio-toggle input {
+    accent-color: var(--mint);
+}
+
+.audio-source-setting {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) minmax(150px, 1fr);
+    align-items: center;
+    gap: 14px;
+    margin: 12px 0;
+    color: #c7d8d8;
+    text-align: left;
+}
+
+.audio-source-setting select {
+    width: 100%;
+    min-height: 38px;
+    padding: 7px 10px;
+    border: 1px solid rgba(165, 193, 195, 0.24);
+    border-radius: 4px;
+    background: #0b171e;
+    color: #e7f4f1;
 }
 
 .stats-list {
@@ -434,8 +733,28 @@ textarea:focus-visible {
         display: block;
     }
 
-    .hud-bottom {
-        padding-bottom: 54px;
+    :root {
+        --hud-rail-width: 144px;
+    }
+
+    .hud {
+        gap: 8px;
+        padding: 10px 8px;
+    }
+
+    .hud-stat {
+        padding: 8px;
+    }
+
+    .hud-bottom,
+    .hud-top {
+        gap: 6px;
+    }
+
+    .hud-bottom > span,
+    .hud-controls-right > span {
+        min-height: 48px;
+        padding: 7px;
     }
 }
 
@@ -470,9 +789,38 @@ textarea:focus-visible {
         padding: 12px;
     }
 
+    @media (max-width: 360px) {
+        .ship-choices {
+            gap: 6px;
+        }
+
+        .ship-choice {
+            padding-right: 4px;
+            padding-left: 4px;
+        }
+    }
+
     .panel {
         max-height: 100%;
         overflow-y: auto;
+    }
+}
+
+@media (max-width: 420px) {
+    .audio-setting {
+        grid-template-columns: 1fr;
+        justify-items: start;
+        gap: 2px;
+    }
+
+    .weapon-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .audio-source-setting {
+        grid-template-columns: 1fr;
+        gap: 5px;
     }
 }
 
