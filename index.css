@@ -71,7 +71,7 @@ body {
 
 /* hidden while playing so it never covers the Score in the HUD */ /*currently not hidden*/
 #hud:not([hidden]) ~ .creator-tag {
-    display: block;
+    display: flex;
 }
 
 @media (max-width: 420px) {

@@ -267,10 +267,14 @@ const audioSources = {
   shoot: {
     "bullet-01": "audio/bullet_sound_01.mp3",
     "bullet-02": "audio/bullet_sound_02.mp3",
+    "bullet-03": "audio/bullet_sound_03.mp3",
+    "bullet-04": "audio/bullet_sound_04.mp3",
   },
   hit: {
     "bullet-01": "audio/bullet_sound_01.mp3",
     "bullet-02": "audio/bullet_sound_02.mp3",
+    "bullet-03": "audio/bullet_sound_03.mp3",
+    "bullet-04": "audio/bullet_sound_04.mp3",
   },
   background: {
     "background-01": "audio/background_music_01.mp3",
@@ -296,7 +300,7 @@ const screens = {
    Tune everything in WEAPON_FX below.
    ===================================================================== */
 const WEAPON_FX = {
-  laser: { speed: 1300, line: 220 }, // burns through words right behind the target
+  laser: { speed: 1300 },
   plasma: { speed: 560, blast: 75 }, // splash melt (+ slows the hit word)
   particle: { speed: 3000, line: 3000 }, // instant beam: kills EVERY word in the line
   ion: { speed: 850, freeze: 240, chain: 2 }, // EMP freezes words, lightning zaps 2 nearest
@@ -794,52 +798,50 @@ function weaponTrail(p) {
 }
 /* ===== END WEAPON EFFECTS ===== */
 
+function defaultSaveData() {
+  return {
+    settings: {
+      masterVolume: 100,
+      musicVolume: 35,
+      soundEffectsVolume: 60,
+      musicEnabled: true,
+      soundEffectsEnabled: true,
+    },
+    stats: {
+      bestScore: 0,
+      bestWave: 0,
+      gamesPlayed: 0,
+      bestStreak: 0,
+      bestAccuracy: 0,
+    },
+    selectedShip: "interceptor",
+    shootingMethod: "standard",
+    selectedWeapon: "laser",
+    audioSelection: {
+      shoot: "bullet-03",
+      hit: "bullet-03",
+      background: "background-01",
+    },
+    customWords: "",
+  };
+}
+
 function readSave() {
-  const raw = localStorage.getItem(storageKey);
-  if (!raw) {
-    return {
-      settings: {
-        masterVolume: 100,
-        musicVolume: 35,
-        soundEffectsVolume: 60,
-        musicEnabled: true,
-        soundEffectsEnabled: true,
-      },
-      stats: { bestScore: 0, bestWave: 0, gamesPlayed: 0, bestStreak: 0 },
-      selectedShip: "interceptor",
-      shootingMethod: "standard",
-      selectedWeapon: "laser",
-      audioSelection: {
-        shoot: "bullet-01",
-        hit: "bullet-01",
-        background: "background-01",
-      },
-    };
+  let raw;
+  try {
+    raw = localStorage.getItem(storageKey);
+  } catch (error) {
+    console.error("Saved game data could not be accessed.", error);
+    return defaultSaveData();
   }
+  if (!raw) return defaultSaveData();
 
   let saved;
   try {
     saved = JSON.parse(raw);
   } catch (error) {
     console.error("Saved game data could not be read.", error);
-    return {
-      settings: {
-        masterVolume: 100,
-        musicVolume: 35,
-        soundEffectsVolume: 60,
-        musicEnabled: true,
-        soundEffectsEnabled: true,
-      },
-      stats: { bestScore: 0, bestWave: 0, gamesPlayed: 0, bestStreak: 0 },
-      selectedShip: "interceptor",
-      shootingMethod: "standard",
-      selectedWeapon: "laser",
-      audioSelection: {
-        shoot: "bullet-01",
-        hit: "bullet-01",
-        background: "background-01",
-      },
-    };
+    return defaultSaveData();
   }
   if (!saved || typeof saved !== "object") saved = {};
 
@@ -861,10 +863,11 @@ function readSave() {
     saved.audioSelection && typeof saved.audioSelection === "object"
       ? saved.audioSelection
       : {};
-  const validAudioSelection = (kind, value) =>
-    Object.prototype.hasOwnProperty.call(audioSources[kind], value)
-      ? value
-      : Object.keys(audioSources[kind])[0];
+  const validAudioSelection = (kind, value) => {
+    if (Object.prototype.hasOwnProperty.call(audioSources[kind], value))
+      return value;
+    return kind === "background" ? "background-01" : "bullet-03";
+  };
   const boundedVolume = (value, fallback) =>
     Number.isFinite(value) ? Math.max(0, Math.min(100, value)) : fallback;
   return {
@@ -912,13 +915,21 @@ function readSave() {
       bestStreak: Number.isFinite(stats.bestStreak)
         ? Math.max(0, stats.bestStreak)
         : 0,
+      bestAccuracy: Number.isFinite(stats.bestAccuracy)
+        ? Math.max(0, Math.min(100, stats.bestAccuracy))
+        : 0,
     },
+    customWords:
+      typeof saved.customWords === "string"
+        ? saved.customWords.slice(0, 2000)
+        : "",
   };
 }
 
 const savedData = readSave();
 const settings = savedData.settings;
 const lifetimeStats = savedData.stats;
+customWordsInput.value = savedData.customWords;
 let selectedShipId = savedData.selectedShip;
 let shootingMethod = savedData.shootingMethod;
 let selectedWeaponId = savedData.selectedWeapon;
@@ -977,17 +988,22 @@ function createGameState() {
 }
 
 function saveData() {
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify({
-      settings,
-      stats: lifetimeStats,
-      selectedShip: selectedShipId,
-      shootingMethod,
-      selectedWeapon: selectedWeaponId,
-      audioSelection,
-    }),
-  );
+  try {
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        settings,
+        stats: lifetimeStats,
+        selectedShip: selectedShipId,
+        shootingMethod,
+        selectedWeapon: selectedWeaponId,
+        audioSelection,
+        customWords: customWordsInput.value,
+      }),
+    );
+  } catch (error) {
+    console.error("Game data could not be saved.", error);
+  }
 }
 
 function currentAccuracy() {
@@ -1042,6 +1058,8 @@ function updateStatsScreen() {
   document.getElementById("bestStreakValue").textContent = String(
     lifetimeStats.bestStreak,
   );
+  document.getElementById("bestAccuracyValue").textContent =
+    `${lifetimeStats.bestAccuracy}%`;
 }
 
 function updateSettingsControls() {
@@ -1453,7 +1471,7 @@ function handleCharacter(character) {
 function fireAt(enemy, completesTarget = false) {
   const { x: targetX, y: targetY } = getTargetPoint(enemy);
   const ship = getShipOrigin();
-  const barrelOffsets = weaponBarrelOffsets();
+  const barrelOffsets = [...new Set(weaponBarrelOffsets())];
   const projectilesToFire = barrelOffsets.map((barrelOffset, volleyIndex) => {
     const barrelX = ship.x - (Math.sin(aimAngle) * barrelOffset) / viewScale;
     const barrelY = ship.y + (Math.cos(aimAngle) * barrelOffset) / viewScale;
@@ -1622,6 +1640,10 @@ function finishGame() {
     lifetimeStats.bestStreak,
     game.longestStreak,
   );
+  lifetimeStats.bestAccuracy = Math.max(
+    lifetimeStats.bestAccuracy,
+    currentAccuracy(),
+  );
   saveData();
 
   document.getElementById("finalScoreValue").textContent =
@@ -1759,9 +1781,16 @@ function drawShip() {
   const shipHeight = 72 / viewScale;
   const ship = getShipOrigin();
   const design = getSelectedShip();
+  const entranceProgress =
+    screenName === "playing" || screenName === "paused"
+      ? Math.min(game.elapsed / 0.9, 1)
+      : 1;
+  const easedEntrance = 1 - (1 - entranceProgress) ** 3;
+  const entranceOffset =
+    (1 - easedEntrance) * (height - ship.y + shipHeight);
 
   context.save();
-  context.translate(ship.x, ship.y);
+  context.translate(ship.x, ship.y + entranceOffset);
   context.rotate(aimAngle + Math.PI / 2);
   drawShipVisual(context, design, shipWidth, shipHeight, 1 / viewScale);
   context.restore();
@@ -2371,6 +2400,20 @@ function frame(timestamp) {
   requestAnimationFrame(frame);
 }
 
+const pressedKeys = new Set();
+let controlPressPending = false;
+let controlPressUsed = false;
+let controlPressStartedInEditable = false;
+let spacePressTimer = null;
+
+function isEditableTarget(target) {
+  return (
+    target instanceof HTMLElement &&
+    (target.isContentEditable ||
+      target.matches("input, textarea, select, [role='textbox']"))
+  );
+}
+
 document.addEventListener("click", (event) => {
   const button = event.target.closest("[data-action]");
   if (button)
@@ -2382,6 +2425,58 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  const editableTarget = isEditableTarget(event.target);
+  const isControlKey =
+    event.code === "ControlLeft" || event.code === "ControlRight";
+
+  if (isControlKey) {
+    if (!event.repeat && !pressedKeys.has(event.code)) {
+      pressedKeys.add(event.code);
+      controlPressPending = true;
+      controlPressUsed = false;
+      controlPressStartedInEditable = editableTarget;
+    }
+    return;
+  }
+
+  if (event.repeat || pressedKeys.has(event.code)) return;
+  pressedKeys.add(event.code);
+  if (controlPressPending) controlPressUsed = true;
+  if (editableTarget) return;
+
+  if (event.ctrlKey && event.altKey && event.code === "KeyC") {
+    event.preventDefault();
+    handleAction("ships");
+    return;
+  }
+
+  if (event.ctrlKey && !event.altKey && event.code === "KeyH") {
+    event.preventDefault();
+    handleAction("title");
+    return;
+  }
+
+  if (
+    event.code === "Space" &&
+    (screenName === "playing" || screenName === "paused")
+  ) {
+    event.preventDefault();
+    if (spacePressTimer !== null) {
+      window.clearTimeout(spacePressTimer);
+      spacePressTimer = null;
+      setScreen("title");
+    } else {
+      spacePressTimer = window.setTimeout(() => {
+        spacePressTimer = null;
+        if (screenName === "playing") setScreen("paused");
+        else if (screenName === "paused") setScreen("playing");
+      }, 320);
+    }
+    return;
+  }
+
+  if (event.ctrlKey || event.metaKey || event.altKey) return;
+
   if (event.key === "Escape") {
     if (screenName === "playing") {
       event.preventDefault();
@@ -2393,14 +2488,34 @@ document.addEventListener("keydown", (event) => {
     return;
   }
 
-  if (
-    event.repeat ||
-    screenName !== "playing" ||
-    event.target === touchInput ||
-    event.key.length !== 1
-  )
-    return;
+  if (screenName !== "playing" || event.key.length !== 1) return;
   handleCharacter(event.key);
+});
+
+document.addEventListener("keyup", (event) => {
+  pressedKeys.delete(event.code);
+
+  if (event.code !== "ControlLeft" && event.code !== "ControlRight") return;
+  const shouldOpenSettings =
+    controlPressPending &&
+    !controlPressUsed &&
+    !controlPressStartedInEditable &&
+    !isEditableTarget(event.target);
+  controlPressPending = false;
+  controlPressUsed = false;
+  controlPressStartedInEditable = false;
+  if (shouldOpenSettings) handleAction("settings");
+});
+
+window.addEventListener("blur", () => {
+  pressedKeys.clear();
+  controlPressPending = false;
+  controlPressUsed = false;
+  controlPressStartedInEditable = false;
+  if (spacePressTimer !== null) {
+    window.clearTimeout(spacePressTimer);
+    spacePressTimer = null;
+  }
 });
 
 touchInput.addEventListener("input", () => {
@@ -2408,6 +2523,8 @@ touchInput.addEventListener("input", () => {
   touchInput.value = "";
   for (const character of typedText) handleCharacter(character);
 });
+
+customWordsInput.addEventListener("input", saveData);
 
 for (const [input, setting, output] of [
   [masterVolumeInput, "masterVolume", masterVolumeValue],

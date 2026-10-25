@@ -39,7 +39,7 @@
                 </div>
             </header>
 
-            <div class="creator-tag" aria-label="Created by Prem Kumar Modi"><span>Prem Kumar</span><span class="creator-surname">Modi</span></div>
+            <div class="creator-tag" aria-label="Created by Prem Kumar Modi"><span>Prem Kumar </span><span class="creator-surname">Modi</span></div>
 
             <section id="titleScreen" class="screen title-screen" aria-labelledby="gameTitle">
                 <div class="title-content">
@@ -53,7 +53,7 @@
                         <button class="button button-secondary" type="button" data-action="stats">My stats</button>
                         <button class="button button-text" type="button" data-action="custom">Use your own words</button>
                     </div>
-                    <p class="control-hint">Type the first letter of a target to lock on, then finish the word.</p>
+                    <p class="control-hint">Type the first letter of a target to lock on, then finish the word.<br> Space pauses or resumes (double Space returns home); Ctrl opens Settings; Ctrl+H returns home; Ctrl+Alt+C opens Customize spaceship.</p>
                 </div>
             </section>
 
@@ -146,7 +146,7 @@
                     <p class="panel-copy">Your wave is waiting.</p>
                     <div class="menu-actions">
                         <button class="button button-primary" type="button" data-action="resume">Resume</button>
-                        <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                        <button class="button button-secondary" type="button" data-action="title">Back to Home</button>
                     </div>
                 </div>
             </section>
@@ -184,6 +184,8 @@
                         <select id="shootSound">
                             <option value="bullet-01">Bullet sound 01</option>
                             <option value="bullet-02">Bullet sound 02</option>
+                            <option value="bullet-03">Bullet sound 03</option>
+                            <option value="bullet-04">Bullet sound 04</option>
                         </select>
                     </label>
                     <label class="audio-source-setting" for="hitSound">
@@ -191,6 +193,8 @@
                         <select id="hitSound">
                             <option value="bullet-01">Bullet sound 01</option>
                             <option value="bullet-02">Bullet sound 02</option>
+                            <option value="bullet-03">Bullet sound 03</option>
+                            <option value="bullet-04">Bullet sound 04</option>
                         </select>
                     </label>
                     <label class="audio-source-setting" for="backgroundMusic">
@@ -223,8 +227,9 @@
                         <div><dt>Best wave</dt><dd id="bestWaveValue">0</dd></div>
                         <div><dt>Games played</dt><dd id="gamesPlayedValue">0</dd></div>
                         <div><dt>Longest streak</dt><dd id="bestStreakValue">0</dd></div>
+                        <div><dt>Best accuracy</dt><dd id="bestAccuracyValue">0%</dd></div>
                     </dl>
-                    <button class="button button-secondary" type="button" data-action="title">Back to title</button>
+                    <button class="button button-secondary" type="button" data-action="title">Back to Home</button>
                 </div>
             </section>
 
