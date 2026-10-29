@@ -95,6 +95,109 @@ const defaultWords = [
   "stylesheet",
   "gradient",
   "responsive",
+
+  //! from here maths words
+
+  "equation",
+  "inequality",
+  "polynomial",
+  "coefficient",
+  "constant",
+  "factor",
+  "root",
+  "degree",
+  "discriminant",
+  "reciprocal",
+  "remainder",
+  "quotient",
+  "simultaneous",
+  "identity",
+  "substitution",
+  "matrix",
+  "determinant",
+  "singular",
+  "non-singular",
+  "transpose",
+  "inverse",
+  "identity-matrix",
+  "order",
+  "symmetric",
+  "skew-symmetric",
+  "trace",
+  "adjoint",
+  "minor",
+  "cofactor",
+  "rank",
+  "slope",
+  "intercept",
+  "collinear",
+  "perpendicular",
+  "parallel",
+  "distance",
+  "midpoint",
+  "locus",
+  "tangent",
+  "normal",
+  "chord",
+  "radius",
+  "diameter",
+  "concentric",
+  "eccentricity",
+  "sine",
+  "cosine",
+  "tangent",
+  "cotangent",
+  "secant",
+  "cosecant",
+  "periodicity",
+  "amplitude",
+  "principal-value",
+  "complementary",
+  "limit",
+  "continuity",
+  "derivative",
+  "differentiation",
+  "integration",
+  "antiderivative",
+  "maximum",
+  "minimum",
+  "stationary-point",
+  "inflection-point",
+  "increasing",
+  "decreasing",
+  "definite-integral",
+  "indefinite-integral",
+  "asymptote",
+  "probability",
+  "sample-space",
+  "event",
+  "mutually-exclusive",
+  "independent",
+  "conditional-probability",
+  "permutation",
+  "combination",
+  "mean",
+  "median",
+  "mode",
+  "variance",
+  "standard-deviation",
+  "random-variable",
+  "expected-value",
+  "union",
+  "intersection",
+  "complement",
+  "subset",
+  "domain",
+  "range",
+  "one-to-one",
+  "onto",
+  "bijective",
+  "composite-function",
+  "arithmetic-progression",
+  "geometric-progression",
+  "convergence",
+  "divergence",
+  "periodic-function",
 ];
 
 const storageKey = "wordwave-save-v1";
@@ -244,9 +347,9 @@ let height = 720;
 let viewScale = 1;
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
+const mobileLayout = window.matchMedia("(pointer: coarse), (max-width: 600px)");
 const hud = document.getElementById("hud");
-const touchEntry = document.getElementById("touchEntry");
-const touchInput = document.getElementById("touchInput");
+const gameKeyboard = document.getElementById("gameKeyboard");
 const masterVolumeInput = document.getElementById("masterVolume");
 const musicInput = document.getElementById("musicVolume");
 const soundEffectsInput = document.getElementById("soundEffectsVolume");
@@ -1017,16 +1120,10 @@ function setScreen(nextScreen) {
     element.hidden = name !== nextScreen;
   }
   hud.hidden = nextScreen !== "playing";
-  touchEntry.hidden = nextScreen !== "playing";
+  gameKeyboard.hidden = nextScreen !== "playing";
   if (nextScreen === "playing") setMusicActive(true);
   updateHud();
 
-  if (
-    nextScreen === "playing" &&
-    window.matchMedia("(pointer: coarse)").matches
-  ) {
-    touchInput.focus({ preventScroll: true });
-  }
   if (nextScreen === "ships") {
     drawShipPreviews();
     updateWeaponChoices();
@@ -1269,6 +1366,7 @@ function playTone(frequency, duration, volume = 0.04, type = "sine") {
 
 function startGame(wordList = defaultWords) {
   wordsForGame = wordList;
+  createGameKeyboard(wordList);
   game = createGameState();
   activeWords = [];
   projectiles = [];
@@ -1436,7 +1534,7 @@ function findTargetFor(character) {
 
 function handleCharacter(character) {
   const normalized = character.toLowerCase();
-  if (!/^[a-z0-9-]$/.test(normalized) || screenName !== "playing") return;
+  if (!/^[a-z0-9'-]$/.test(normalized) || screenName !== "playing") return;
 
   game.totalKeys += 1;
   let target =
@@ -1777,8 +1875,9 @@ function drawBackground(delta) {
 }
 
 function drawShip() {
-  const shipWidth = 60 / viewScale;
-  const shipHeight = 72 / viewScale;
+  const shipScale = mobileLayout.matches ? 0.75 : 1;
+  const shipWidth = (60 * shipScale) / viewScale;
+  const shipHeight = (72 * shipScale) / viewScale;
   const ship = getShipOrigin();
   const design = getSelectedShip();
   const entranceProgress =
@@ -1786,8 +1885,7 @@ function drawShip() {
       ? Math.min(game.elapsed / 0.9, 1)
       : 1;
   const easedEntrance = 1 - (1 - entranceProgress) ** 3;
-  const entranceOffset =
-    (1 - easedEntrance) * (height - ship.y + shipHeight);
+  const entranceOffset = (1 - easedEntrance) * (height - ship.y + shipHeight);
 
   context.save();
   context.translate(ship.x, ship.y + entranceOffset);
@@ -2030,11 +2128,12 @@ function loadShipImages() {
 }
 
 function drawEnemy(enemy) {
-  const fontSize = 17 / viewScale;
+  const fontSize = (mobileLayout.matches ? 13 : 17) / viewScale;
+  const horizontalPadding = (mobileLayout.matches ? 8 : 10) / viewScale;
   context.font = `500 ${fontSize}px "Trebuchet MS", "Segoe UI", sans-serif`;
   const textWidth = context.measureText(enemy.word).width;
-  const boxWidth = textWidth + 20 / viewScale;
-  const boxHeight = 27 / viewScale;
+  const boxWidth = textWidth + horizontalPadding * 2;
+  const boxHeight = (mobileLayout.matches ? 23 : 27) / viewScale;
   const x = Math.max(
     6 / viewScale,
     Math.min(width - boxWidth - 6 / viewScale, enemy.x + enemy.pushX),
@@ -2065,11 +2164,11 @@ function drawEnemy(enemy) {
   const typedText = enemy.word.slice(0, enemy.typed);
   const remainingText = enemy.word.slice(enemy.typed);
   context.fillStyle = "#58f0cf";
-  context.fillText(typedText, x + 10 / viewScale, y + boxHeight / 2);
+  context.fillText(typedText, x + horizontalPadding, y + boxHeight / 2);
   context.fillStyle = "#f2fbfa";
   context.fillText(
     remainingText,
-    x + 10 / viewScale + context.measureText(typedText).width,
+    x + horizontalPadding + context.measureText(typedText).width,
     y + boxHeight / 2,
   );
 
@@ -2414,6 +2513,67 @@ function isEditableTarget(target) {
   );
 }
 
+function createGameKeyboard(wordList) {
+  const availableCharacters = new Set(
+    wordList
+      .join("")
+      .toLowerCase()
+      .match(/[a-z0-9'-]/g) || [],
+  );
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  const hasAllLetters = [...alphabet].every((character) =>
+    availableCharacters.has(character),
+  );
+  const keyOrder = "qwertyuiopasdfghjklzxcvbnm0123456789-'";
+  const availableKeys = [...keyOrder].filter((character) =>
+    availableCharacters.has(character),
+  );
+  const rowLayouts = hasAllLetters
+    ? ["qwertyuiop", "asdfghjkl", "zxcvbnm", "0123456789-'"].map((row) =>
+        [...row]
+          .filter((character) => availableCharacters.has(character))
+          .join(""),
+      )
+    : Array.from({ length: Math.ceil(availableKeys.length / 10) }, (_, index) =>
+        availableKeys.slice(index * 10, index * 10 + 10).join(""),
+      );
+  const populatedRows = rowLayouts.filter(Boolean);
+  gameKeyboard.replaceChildren();
+  canvas.parentElement.dataset.keyboardRows = String(populatedRows.length);
+
+  for (const rowLayout of populatedRows) {
+    const row = document.createElement("div");
+    row.className = "game-keyboard-row";
+    for (const character of rowLayout) {
+      if (!availableCharacters.has(character)) continue;
+      const key = document.createElement("button");
+      key.className = "game-key";
+      key.type = "button";
+      key.dataset.gameKey = character;
+      key.setAttribute(
+        "aria-label",
+        character === "'" ? "apostrophe" : character,
+      );
+      key.textContent = character;
+      row.append(key);
+    }
+    if (row.childElementCount) gameKeyboard.append(row);
+  }
+}
+
+gameKeyboard.addEventListener("pointerdown", (event) => {
+  const gameKey = event.target.closest("[data-game-key]");
+  if (gameKey) {
+    event.preventDefault();
+    handleCharacter(gameKey.dataset.gameKey);
+  }
+});
+
+gameKeyboard.addEventListener("click", (event) => {
+  const gameKey = event.target.closest("[data-game-key]");
+  if (gameKey && event.detail === 0) handleCharacter(gameKey.dataset.gameKey);
+});
+
 document.addEventListener("click", (event) => {
   const button = event.target.closest("[data-action]");
   if (button)
@@ -2518,12 +2678,6 @@ window.addEventListener("blur", () => {
   }
 });
 
-touchInput.addEventListener("input", () => {
-  const typedText = touchInput.value;
-  touchInput.value = "";
-  for (const character of typedText) handleCharacter(character);
-});
-
 customWordsInput.addEventListener("input", saveData);
 
 for (const [input, setting, output] of [
@@ -2587,6 +2741,7 @@ shootingMethodInputs.forEach((input) => {
 
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
+window.visualViewport?.addEventListener("resize", resizeCanvas);
 
 updateSettingsControls();
 updateStatsScreen();

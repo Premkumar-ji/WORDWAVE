@@ -696,65 +696,347 @@ textarea:focus-visible {
     font-size: 0.9rem;
 }
 
-.touch-entry {
-    position: absolute;
-    z-index: 2;
-    inset: auto 14px max(14px, env(safe-area-inset-bottom));
+.game-keyboard {
     display: none;
-}
-
-.touch-entry[hidden] {
-    display: none;
-}
-
-.touch-entry input {
-    width: 100%;
-    min-height: 44px;
-    padding: 9px 12px;
-    border: 1px solid rgba(88, 240, 207, 0.45);
-    border-radius: 5px;
-    background: rgba(4, 13, 18, 0.88);
-    color: #effaf8;
-}
-
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
 }
 
 @media (pointer: coarse), (max-width: 600px) {
-    .touch-entry:not([hidden]) {
-        display: block;
+    :root {
+        font-size: 60%;
+        --hud-rail-width: 0px;
+        --mobile-hud-height: calc(68px + env(safe-area-inset-top));
+        --mobile-keyboard-height: calc(188px + env(safe-area-inset-bottom));
     }
 
-    :root {
-        --hud-rail-width: 144px;
+    .game-frame[data-keyboard-rows="1"] {
+        --mobile-keyboard-height: calc(76px + env(safe-area-inset-bottom));
+    }
+
+    .game-frame[data-keyboard-rows="2"] {
+        --mobile-keyboard-height: calc(122px + env(safe-area-inset-bottom));
+    }
+
+    .game-frame[data-keyboard-rows="3"] {
+        --mobile-keyboard-height: calc(188px + env(safe-area-inset-bottom));
+    }
+
+    .game-frame[data-keyboard-rows="4"] {
+        --mobile-keyboard-height: calc(216px + env(safe-area-inset-bottom));
+    }
+
+    html,
+    body,
+    .app-shell {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+    }
+
+    .app-shell {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    .game-frame {
+        width: 100%;
+        height: 100%;
+    }
+
+    #gameCanvas {
+        top: var(--mobile-hud-height);
+        right: 0;
+        bottom: auto;
+        left: 0;
+        width: 100%;
+        height: calc(100% - var(--mobile-hud-height) - var(--mobile-keyboard-height));
     }
 
     .hud {
-        gap: 8px;
-        padding: 10px 8px;
+        inset: 0 0 auto;
+        flex-direction: column;
+        gap: 3px;
+        width: 100%;
+        height: var(--mobile-hud-height);
+        padding: max(4px, env(safe-area-inset-top)) 7px 4px;
+        border: 0;
+        border-bottom: 1px solid rgba(88, 240, 207, 0.22);
+        background: linear-gradient(155deg, rgba(15, 36, 43, 0.96), rgba(5, 13, 21, 0.96));
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .hud-top {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 4px;
     }
 
     .hud-stat {
-        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        padding: 3px 6px;
+        border-radius: 5px;
     }
 
-    .hud-bottom,
-    .hud-top {
-        gap: 6px;
+    .hud-label,
+    .hud-bottom {
+        font-size: 0.6rem;
+        letter-spacing: 0.06em;
+    }
+
+    .hud-stat strong {
+        font-size: 0.95rem;
+    }
+
+    .hud-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        margin: 0;
     }
 
     .hud-bottom > span,
     .hud-controls-right > span {
-        min-height: 48px;
+        flex-direction: row;
+        align-items: center;
+        gap: 3px;
+        min-height: 24px;
+        padding: 2px 5px;
+        border-radius: 5px;
+    }
+
+    .hud-bottom > span:first-child {
+        grid-column: auto;
+    }
+
+    .hud-controls-right {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .hud-controls-right .icon-button {
+        width: 32px;
+        height: 30px;
+        padding: 0;
+    }
+
+    .hud-menu-button[data-action="loadout"],
+    .creator-tag {
+        display: none !important;
+    }
+
+    .game-keyboard:not([hidden]) {
+        position: absolute;
+        z-index: 4;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        height: var(--mobile-keyboard-height);
+        padding: 6px 4px max(6px, env(safe-area-inset-bottom));
+        border-top: 1px solid rgba(88, 240, 207, 0.25);
+        background: linear-gradient(180deg, rgba(10, 26, 33, 0.98), rgba(4, 11, 17, 0.99));
+        box-shadow: 0 -5px 18px rgba(0, 0, 0, 0.24);
+        touch-action: manipulation;
+        user-select: none;
+    }
+
+    .game-keyboard-row {
+        display: flex;
+        justify-content: center;
+        gap: clamp(2px, 0.7vw, 5px);
+        width: 100%;
+        min-height: 0;
+    }
+
+    .game-key {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 42px;
+        height: clamp(34px, 9vw, 44px);
+        padding: 0;
+        border: 1px solid rgba(88, 240, 207, 0.28);
+        border-radius: 5px;
+        background: linear-gradient(180deg, rgba(27, 55, 62, 0.98), rgba(12, 30, 37, 0.98));
+        color: #e8fbf7;
+        font-size: clamp(0.9rem, 4vw, 1.15rem);
+        font-weight: 700;
+        line-height: 1;
+        text-transform: uppercase;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    .game-key:active {
+        border-color: var(--mint);
+        background: rgba(88, 240, 207, 0.28);
+        transform: translateY(1px);
+    }
+
+    .game-key:focus-visible {
+        outline: 2px solid var(--mint);
+        outline-offset: 1px;
+    }
+
+    .screen {
+        padding: 12px;
+    }
+
+    .title-content,
+    .panel {
+        width: min(100%, 380px);
+    }
+
+    .title-content {
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    h2 {
+        font-size: clamp(1.4rem, 6vw, 2rem);
+    }
+
+    .eyebrow {
+        margin-bottom: 6px;
+    }
+
+    .tagline,
+    .panel-copy {
+        margin-bottom: 12px;
+    }
+
+    .menu-actions {
+        gap: 5px;
+        margin-top: 12px;
+    }
+
+    .button {
+        min-width: 0;
+        min-height: 32px;
+        padding: 6px 10px;
+    }
+
+    .button-text {
+        min-height: 28px;
+    }
+
+    .control-hint {
+        display: none;
+    }
+
+    .modal-screen {
+        padding: 10px;
+    }
+
+    .panel {
+        padding: 14px 12px;
+    }
+
+    .panel .menu-actions {
+        margin-top: 12px;
+    }
+
+    .ship-choices {
+        gap: 6px;
+        margin: 12px 0;
+    }
+
+    .ship-choice {
+        padding: 6px 4px;
+    }
+
+    .ship-preview {
+        height: 58px;
+    }
+
+    .loadout-heading,
+    .stats-list,
+    .result-grid {
+        margin-top: 12px;
+    }
+
+    .setting-control {
+        gap: 6px;
+        margin: 12px auto;
+    }
+
+    .audio-source-setting select {
+        min-height: 32px;
+        padding: 4px 7px;
+    }
+
+    .stats-list div {
+        padding: 6px 0;
+    }
+
+    .result-grid {
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+
+    .result-grid div {
+        gap: 2px;
         padding: 7px;
+    }
+
+    #customWords {
+        padding: 8px;
+    }
+
+    .game-over-panel,
+    .ship-panel {
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
+    @media (orientation: landscape) {
+        :root {
+            --mobile-hud-height: calc(64px + env(safe-area-inset-top));
+            --mobile-keyboard-height: calc(156px + env(safe-area-inset-bottom));
+        }
+
+        .game-frame[data-keyboard-rows="1"] {
+            --mobile-keyboard-height: calc(68px + env(safe-area-inset-bottom));
+        }
+
+        .game-frame[data-keyboard-rows="2"] {
+            --mobile-keyboard-height: calc(104px + env(safe-area-inset-bottom));
+        }
+
+        .game-frame[data-keyboard-rows="3"] {
+            --mobile-keyboard-height: calc(156px + env(safe-area-inset-bottom));
+        }
+
+        .game-frame[data-keyboard-rows="4"] {
+            --mobile-keyboard-height: calc(184px + env(safe-area-inset-bottom));
+        }
+
+        .game-key {
+            height: clamp(30px, 8vh, 40px);
+        }
+
+        .screen,
+        .modal-screen {
+            padding: 6px;
+        }
+
+        .panel {
+            padding: 10px;
+        }
+
+        .title-content {
+            max-width: 300px;
+        }
     }
 }
 
