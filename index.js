@@ -393,6 +393,9 @@ const screens = {
   custom: document.getElementById("customScreen"),
   gameOver: document.getElementById("gameOverScreen"),
 };
+const homeSidebarAd = document.getElementById("home-sidebar-ad");
+const gameSidebarAd = document.getElementById("game-sidebar-ad");
+const initializedAdUnits = new WeakSet();
 
 /* ===== WEAPON EFFECTS (integrated) ===== */
 /* =====================================================================
@@ -1114,13 +1117,35 @@ function currentAccuracy() {
   return Math.round((game.correctKeys / game.totalKeys) * 1000) / 10;
 }
 
+function initializeAd(container) {
+  const adUnit = container.querySelector(".adsbygoogle");
+  if (
+    !adUnit ||
+    !/^\d+$/.test(adUnit.dataset.adSlot || "") ||
+    initializedAdUnits.has(adUnit) ||
+    container.getClientRects().length === 0
+  ) {
+    return;
+  }
+
+  initializedAdUnits.add(adUnit);
+  try {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  } catch (error) {
+    console.error("Google AdSense unit could not be initialized.", error);
+  }
+}
+
 function setScreen(nextScreen) {
   screenName = nextScreen;
   for (const [name, element] of Object.entries(screens)) {
     element.hidden = name !== nextScreen;
   }
   hud.hidden = nextScreen !== "playing";
+  homeSidebarAd.hidden = nextScreen !== "title";
   gameKeyboard.hidden = nextScreen !== "playing";
+  if (nextScreen === "title") initializeAd(homeSidebarAd);
+  if (nextScreen === "playing") initializeAd(gameSidebarAd);
   if (nextScreen === "playing") setMusicActive(true);
   updateHud();
 
@@ -2739,9 +2764,15 @@ shootingMethodInputs.forEach((input) => {
   });
 });
 
-window.addEventListener("resize", resizeCanvas);
-window.addEventListener("orientationchange", resizeCanvas);
-window.visualViewport?.addEventListener("resize", resizeCanvas);
+function resizeCanvasAndAds() {
+  resizeCanvas();
+  if (screenName === "title") initializeAd(homeSidebarAd);
+  if (screenName === "playing") initializeAd(gameSidebarAd);
+}
+
+window.addEventListener("resize", resizeCanvasAndAds);
+window.addEventListener("orientationchange", resizeCanvasAndAds);
+window.visualViewport?.addEventListener("resize", resizeCanvasAndAds);
 
 updateSettingsControls();
 updateStatsScreen();
