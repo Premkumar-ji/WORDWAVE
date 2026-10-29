@@ -395,6 +395,8 @@ const screens = {
 };
 const homeSidebarAd = document.getElementById("home-sidebar-ad");
 const gameSidebarAd = document.getElementById("game-sidebar-ad");
+const infoDialog = document.getElementById("infoDialog");
+const infoFrame = document.getElementById("infoFrame");
 const initializedAdUnits = new WeakSet();
 
 /* ===== WEAPON EFFECTS (integrated) ===== */
@@ -1789,7 +1791,7 @@ function parseCustomWords() {
   return [...new Set(parsed.map((word) => word.toLowerCase()))].slice(0, 80);
 }
 
-function handleAction(action, shipId = null, weaponId = null) {
+function handleAction(action, shipId = null, weaponId = null, infoPage = null) {
   if (action === "start") {
     startGame();
   } else if (action === "ships") {
@@ -1840,6 +1842,28 @@ function handleAction(action, shipId = null, weaponId = null) {
     setScreen(
       screenName === "settings" ? settingsReturnScreen : shipsReturnScreen,
     );
+  } else if (action === "close-screen") {
+    if (screenName === "paused") {
+      setScreen("playing");
+    } else if (screenName === "settings" || screenName === "ships") {
+      handleAction("menu-back");
+    } else if (screenName !== "playing") {
+      setScreen("title");
+    }
+  } else if (action === "info") {
+    const infoPages = {
+      "about.html": "About Wordwave",
+      "privacy.html": "Privacy & Terms",
+      "controls.html": "Wordwave Controls",
+    };
+    if (Object.prototype.hasOwnProperty.call(infoPages, infoPage)) {
+      document.getElementById("infoDialogTitle").textContent =
+        infoPages[infoPage];
+      infoFrame.src = infoPage;
+      infoDialog.showModal();
+    }
+  } else if (action === "close-info") {
+    infoDialog.close();
   }
 }
 
@@ -2606,6 +2630,7 @@ document.addEventListener("click", (event) => {
       button.dataset.action,
       button.dataset.ship,
       button.dataset.weapon,
+      button.dataset.infoPage,
     );
 });
 
@@ -2628,6 +2653,16 @@ document.addEventListener("keydown", (event) => {
   pressedKeys.add(event.code);
   if (controlPressPending) controlPressUsed = true;
   if (editableTarget) return;
+
+  if (screenName === "gameOver" && event.code === "Enter") {
+    const focusedControl =
+      event.target instanceof Element && event.target.closest("button, a");
+    if (!focusedControl) {
+      event.preventDefault();
+      startGame();
+    }
+    return;
+  }
 
   if (event.ctrlKey && event.altKey && event.code === "KeyC") {
     event.preventDefault();

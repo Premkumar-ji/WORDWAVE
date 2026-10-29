@@ -408,12 +408,28 @@ textarea:focus-visible {
     line-height: 1.5;
 }
 
+.info-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 12px;
+    margin-top: 8px;
+}
+
+.info-link {
+    min-width: 0;
+    min-height: 34px;
+    padding: 6px 8px;
+    font-size: 0.78rem;
+}
+
 .modal-screen {
     background: var(--panel);
     backdrop-filter: blur(5px);
 }
 
 .panel {
+    position: relative;
     max-height: 100%;
     overflow-y: auto;
     padding: clamp(20px, 6vw, 36px) clamp(16px, 5vw, 32px);
@@ -422,8 +438,79 @@ textarea:focus-visible {
     box-shadow: 0 16px 45px rgba(0, 0, 0, 0.35);
 }
 
+.panel-close {
+    position: sticky;
+    top: 8px;
+    display: block;
+    margin: -8px -8px -36px auto;
+    z-index: 1;
+    width: 36px;
+    height: 36px;
+    border-color: rgba(183, 218, 215, 0.35);
+    background: rgba(5, 13, 19, 0.92);
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
 .panel .menu-actions {
     margin-top: 24px;
+}
+
+.info-dialog {
+    display: flex;
+    flex-direction: column;
+    width: min(920px, calc(100vw - 24px));
+    height: min(90vh, 820px);
+    height: min(90dvh, 820px);
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(88, 240, 207, 0.35);
+    border-radius: 8px;
+    background: #071018;
+    color: #ecf8f7;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55);
+}
+
+.info-dialog:not([open]) {
+    display: none;
+}
+
+.info-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.76);
+    backdrop-filter: blur(4px);
+}
+
+.info-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 52px;
+    padding: 6px 10px 6px 16px;
+    border-bottom: 1px solid rgba(88, 240, 207, 0.22);
+    color: var(--mint);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.info-dialog-header .icon-button {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.info-dialog iframe {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    background: #050a11;
 }
 
 .ship-panel {

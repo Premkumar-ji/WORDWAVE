@@ -1,0 +1,654 @@
+<!-- ============================================================
+     privacy.html — Wordwave Privacy Policy & Terms of Use
+============================================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071018">
+<meta name="description" content="Wordwave Privacy Policy and Terms of Use — what data is stored locally, how Google AdSense works, and the rules for playing the game.">
+<title>Privacy &amp; Terms — Wordwave</title>
+<link rel="icon" href="data:,">
+<style>
+  :root{
+    --bg:#050a11;
+    --bg-soft:#09161f;
+    --panel:#0d1d26;
+    --ink:#e9f6f5;
+    --muted:#9db6bb;
+    --teal:#58f0cf;
+    --amber:#ffb44a;
+    --line:rgba(88,240,207,.18);
+    --radius:16px;
+    --shadow:0 18px 50px rgba(0,0,0,.55);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    padding:0 18px 64px;
+    font-family:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+    color:var(--ink);
+    line-height:1.7;
+    background:
+      radial-gradient(120% 90% at 50% 0%, #102832 0%, #09161f 48%, var(--bg) 100%) fixed,
+      var(--bg);
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background-image:
+      radial-gradient(1.6px 1.6px at 12% 18%, rgba(188,232,228,.65), transparent 60%),
+      radial-gradient(1.4px 1.4px at 78% 9%,  rgba(188,232,228,.45), transparent 60%),
+      radial-gradient(1.8px 1.8px at 32% 72%, rgba(188,232,228,.35), transparent 60%),
+      radial-gradient(1.2px 1.2px at 88% 61%, rgba(188,232,228,.5),  transparent 60%),
+      radial-gradient(1.5px 1.5px at 58% 38%, rgba(188,232,228,.3),  transparent 60%),
+      radial-gradient(1.3px 1.3px at 6% 88%,  rgba(188,232,228,.4),  transparent 60%);
+  }
+
+  .shell{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:780px;
+    margin:0 auto;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    padding:22px 0 14px;
+  }
+
+  .brand{
+    font-weight:700;
+    letter-spacing:.2em;
+    font-size:14px;
+    color:#fff;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .brand span{color:var(--teal)}
+
+  .site-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+  }
+
+  .site-nav a{
+    padding:8px 15px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(88,240,207,.05);
+    color:var(--muted);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.03em;
+    text-decoration:none;
+    transition:background .18s ease, color .18s ease, border-color .18s ease;
+  }
+
+  .site-nav a:hover,
+  .site-nav a:focus-visible{
+    color:var(--teal);
+    border-color:rgba(88,240,207,.42);
+    background:rgba(88,240,207,.13);
+    outline:none;
+  }
+
+  .site-nav a[aria-current="page"]{
+    color:var(--teal);
+    border-color:rgba(88,240,207,.5);
+    background:rgba(88,240,207,.12);
+  }
+
+  .site-nav .play-link{
+    background:var(--teal);
+    border-color:transparent;
+    color:#062018;
+    font-weight:700;
+  }
+  .site-nav .play-link:hover,
+  .site-nav .play-link:focus-visible{
+    background:#8ff8e0;
+    color:#062018;
+  }
+
+  /* ---------- header ---------- */
+  .page-head{padding:16px 0 26px}
+
+  .eyebrow{
+    margin:0 0 8px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--amber);
+  }
+
+  h1{
+    margin:0 0 12px;
+    font-size:clamp(1.8rem, 6vw, 2.6rem);
+    line-height:1.15;
+    letter-spacing:.01em;
+    color:#fff;
+  }
+
+  .lede{
+    margin:0;
+    max-width:60ch;
+    color:var(--muted);
+    font-size:1.02rem;
+  }
+
+  .updated{
+    display:inline-block;
+    margin-top:14px;
+    padding:5px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(88,240,207,.05);
+    color:var(--muted);
+    font-size:12px;
+    letter-spacing:.06em;
+  }
+
+  /* ---------- jump links ---------- */
+  .jump{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:22px;
+  }
+
+  .jump a{
+    padding:7px 14px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(88,240,207,.05);
+    color:var(--muted);
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:.03em;
+    text-decoration:none;
+    transition:background .18s ease, color .18s ease, border-color .18s ease;
+  }
+
+  .jump a:hover,
+  .jump a:focus-visible{
+    color:var(--teal);
+    border-color:rgba(88,240,207,.42);
+    background:rgba(88,240,207,.13);
+    outline:none;
+  }
+
+  /* ---------- cards ---------- */
+  .card{
+    background:linear-gradient(180deg, rgba(16,40,50,.85), rgba(9,22,31,.92));
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:26px 24px;
+    margin-bottom:18px;
+    scroll-margin-top:20px;
+  }
+
+  h2{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin:0 0 14px;
+    font-size:1.05rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+
+  h2 .num{
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--amber);
+    opacity:.9;
+  }
+
+  p{margin:0 0 12px}
+  p:last-child{margin-bottom:0}
+
+  ul,ol{margin:0 0 12px;padding-left:20px}
+  li{margin-bottom:8px}
+  li:last-child{margin-bottom:0}
+
+  strong{color:#fff}
+  em{color:var(--teal);font-style:normal}
+
+  a{color:var(--teal)}
+  a:hover{color:#8ff8e0}
+
+  code{
+    padding:2px 7px;
+    border-radius:6px;
+    background:rgba(88,240,207,.1);
+    border:1px solid var(--line);
+    color:var(--teal);
+    font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;
+    font-size:.86em;
+    word-break:break-word;
+  }
+
+  /* table */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:12px}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.92rem;
+    min-width:440px;
+  }
+
+  th,td{
+    text-align:left;
+    padding:11px 12px;
+    border-bottom:1px solid rgba(88,240,207,.12);
+    vertical-align:top;
+  }
+
+  th{
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--amber);
+    font-weight:700;
+    border-bottom-color:rgba(255,180,74,.28);
+  }
+
+  tbody tr:last-child td{border-bottom:none}
+
+  /* callout */
+  .callout{
+    margin:0 0 14px;
+    padding:14px 16px;
+    border-radius:12px;
+    border-left:3px solid var(--amber);
+    background:rgba(255,180,74,.08);
+    color:#f4e6cf;
+    font-size:.93rem;
+  }
+  .callout:last-child{margin-bottom:0}
+
+  .callout.teal{
+    border-left-color:var(--teal);
+    background:rgba(88,240,207,.08);
+    color:#d7faf2;
+  }
+
+  /* contact / cta */
+  .cta-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:14px;
+    margin-top:6px;
+  }
+
+  .cta{
+    display:inline-block;
+    padding:12px 24px;
+    border-radius:999px;
+    background:var(--teal);
+    color:#062018;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-decoration:none;
+    box-shadow:0 10px 26px rgba(88,240,207,.28);
+    transition:background .18s ease, transform .18s ease, box-shadow .18s ease;
+  }
+
+  .cta:hover,
+  .cta:focus-visible{
+    background:#8ff8e0;
+    color:#062018;
+    transform:translateY(-1px);
+    box-shadow:0 14px 32px rgba(88,240,207,.36);
+    outline:none;
+  }
+
+  .cta-ghost{
+    display:inline-block;
+    padding:12px 22px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(88,240,207,.06);
+    color:var(--teal);
+    font-weight:600;
+    letter-spacing:.04em;
+    text-decoration:none;
+    transition:background .18s ease, border-color .18s ease;
+  }
+
+  .cta-ghost:hover,
+  .cta-ghost:focus-visible{
+    background:rgba(88,240,207,.14);
+    border-color:rgba(88,240,207,.42);
+    outline:none;
+  }
+
+  /* social links */
+  .social-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:16px;
+  }
+
+  .social-links a{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:40px;
+    padding:9px 14px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(88,240,207,.06);
+    color:var(--teal);
+    font-size:.88rem;
+    font-weight:600;
+    text-decoration:none;
+    overflow-wrap:anywhere;
+    transition:background .18s ease,border-color .18s ease;
+  }
+
+  .social-links a:hover,
+  .social-links a:focus-visible{
+    background:rgba(88,240,207,.14);
+    border-color:rgba(88,240,207,.42);
+    outline:none;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:26px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px 22px;
+    align-items:center;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  .footer-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 18px;
+  }
+
+  .footer-links a{
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:color .16s ease, border-color .16s ease;
+  }
+
+  .footer-links a:hover{
+    color:var(--teal);
+    border-bottom-color:rgba(88,240,207,.5);
+  }
+
+  @media (max-width:520px){
+    body{padding:0 14px 48px}
+    .card{padding:20px 17px;border-radius:14px}
+    .topbar{padding:16px 0 10px}
+    .site-nav a{padding:7px 12px;font-size:12.5px}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;animation:none !important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="topbar">
+    <a class="brand" href="index.html">WORD<span>WAVE</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a class="play-link" href="index.html">▶ Play</a>
+      <a href="about.html">About</a>
+      <a href="privacy.html" aria-current="page">Privacy &amp; Terms</a>
+    </nav>
+  </header>
+
+  <header class="page-head">
+    <p class="eyebrow">The fine print, in plain words</p>
+    <h1>Privacy Policy &amp; Terms of Use</h1>
+    <p class="lede">
+      Wordwave has no accounts and no server of its own. Everything you do in the game
+      stays in your browser. This page covers what is stored locally, how advertising
+      works, and the simple rules for playing.
+    </p>
+    <span class="updated">Last updated: <time datetime="2025-01-01">1 January 2025</time></span>
+
+    <nav class="jump" aria-label="On this page">
+      <a href="#privacy">Privacy</a>
+      <a href="#storage">Local storage</a>
+      <a href="#ads">Ads &amp; cookies</a>
+      <a href="#children">Children</a>
+      <a href="#terms">Terms of use</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ================= PRIVACY ================= -->
+    <section class="card" id="privacy">
+      <h2><span class="num">PRIVACY · 01</span> The short version</h2>
+      <ul>
+        <li>We do <strong>not</strong> ask for your name, email, phone number or address.</li>
+        <li>We do <strong>not</strong> run a database, and no game data is sent to us.</li>
+        <li>Your settings, scores and custom word list live in your browser's <code>localStorage</code>.</li>
+        <li>The only third party on this site is <strong>Google AdSense</strong>, which may use cookies to show ads.</li>
+        <li>Wordwave sets <strong>no tracking cookies of its own</strong> and runs no analytics.</li>
+      </ul>
+    </section>
+
+    <!-- ================= STORAGE ================= -->
+    <section class="card" id="storage">
+      <h2><span class="num">PRIVACY · 02</span> What is stored in your browser</h2>
+      <p>
+        Wordwave saves a single entry called <code>wordwave-save-v1</code> in your
+        browser's local storage. It never leaves your device unless you clear it.
+        It contains:
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">Key</th><th scope="col">What it holds</th><th scope="col">Why</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>settings</code></td>
+              <td>Volume levels, music/SFX on-off, chosen shooting sound, hit sound and background track</td>
+              <td>So your audio preferences survive a refresh</td>
+            </tr>
+            <tr>
+              <td><code>stats</code></td>
+              <td>Best score, best wave, games played, longest streak, best accuracy</td>
+              <td>To power the “My stats” screen</td>
+            </tr>
+            <tr>
+              <td><code>selectedShip</code>, <code>selectedWeapon</code>, <code>shootingMethod</code></td>
+              <td>Your loadout choices</td>
+              <td>So your ship and weapon are remembered</td>
+            </tr>
+            <tr>
+              <td><code>customWords</code></td>
+              <td>The words you typed on the “Use your own words” screen</td>
+              <td>To refill the box next time you open it</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="callout teal">
+        To delete all of this, open your browser's site-data settings for this domain and
+        clear storage, or run <code>localStorage.clear()</code> in the browser console.
+        The game will simply start fresh.
+      </p>
+    </section>
+
+    <!-- ================= ADS ================= -->
+    <section class="card" id="ads">
+      <h2><span class="num">PRIVACY · 03</span> Cookies and third-party advertising</h2>
+      <p>
+        This site displays advertising through <strong>Google AdSense</strong>.
+        Google and its partners may set cookies or read device identifiers to serve
+        and measure ads.
+      </p>
+      <ul>
+        <li>
+          Google's use of advertising cookies enables it and its partners to serve ads
+          based on your visits to this and other sites.
+        </li>
+        <li>
+          You can opt out of personalised advertising at
+          <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.
+        </li>
+        <li>
+          You can also opt out of third-party vendor cookies at
+          <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info/choices</a>.
+        </li>
+        <li>
+          For full details, read
+          <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">How Google uses information from sites that use its services</a>.
+        </li>
+      </ul>
+      <p>
+        Wordwave itself sets no tracking cookies of its own and does not run any
+        analytics or fingerprinting scripts. Audio and image files are served alongside
+        the game as ordinary page assets; no personal information is attached to those
+        requests.
+      </p>
+    </section>
+
+    <!-- ================= CHILDREN ================= -->
+    <section class="card" id="children">
+      <h2><span class="num">PRIVACY · 04</span> Children's privacy</h2>
+      <p>
+        Wordwave is a general-audience typing game and is not directed at children under
+        13. We do not knowingly collect personal information from anyone — including
+        children — because we do not collect personal information at all.
+      </p>
+      <p>
+        If you are a parent or guardian and have concerns about advertising shown on this
+        site, you can use the opt-out links above or a browser-level ad blocker.
+      </p>
+    </section>
+
+    <!-- ================= TERMS ================= -->
+    <section class="card" id="terms">
+      <h2><span class="num">TERMS · 05</span> Terms of use</h2>
+      <p>
+        By playing Wordwave you agree to the following simple rules. They exist to keep
+        the game free and fair for everyone.
+      </p>
+      <ul>
+        <li>
+          <strong>Personal use.</strong> Wordwave is provided free for personal,
+          non-commercial entertainment. You may play it as often as you like.
+        </li>
+        <li>
+          <strong>No resale or rebranding.</strong> You may not sell the game, package it
+          into a paid product, or present it as your own work without written permission.
+        </li>
+        <li>
+          <strong>No malicious use.</strong> You may not use the site to distribute
+          malware, attempt to break security, overload the host, or interfere with other
+          visitors.
+        </li>
+        <li>
+          <strong>No scraping of private data.</strong> The game stores nothing about you
+          on a server, so there is nothing to scrape — but automated abuse of the site or
+          its ads is not permitted.
+        </li>
+        <li>
+          <strong>Third-party links.</strong> Links to Google or other external sites are
+          provided for convenience. Those sites have their own terms and policies.
+        </li>
+      </ul>
+      <p class="callout">
+        <strong>As-is, no warranty.</strong> Wordwave is provided “as is” without
+        warranties of any kind. It is a hobby project: it may change, break, or be
+        unavailable at any time. To the maximum extent permitted by law, the creator is
+        not liable for any loss arising from use of the game, including lost local
+        scores or progress.
+      </p>
+      <p>
+        <strong>Changes.</strong> These terms may be updated as the game evolves. If a
+        change is significant — for example, adding an online leaderboard — this page
+        will be updated first, and the date at the top will change. Continued use of the
+        game after a change means you accept the updated terms.
+      </p>
+    </section>
+
+    <!-- ================= RIGHTS ================= -->
+    <section class="card">
+      <h2><span class="num">PRIVACY · 06</span> Your rights and choices</h2>
+      <ul>
+        <li><strong>Access &amp; deletion:</strong> all game data is on your device — clear it any time via your browser settings.</li>
+        <li><strong>Ad personalisation:</strong> manage it through Google Ads Settings or your regional consent tools.</li>
+        <li><strong>Do Not Track:</strong> the game does not respond to DNT signals, but it also does not track you itself.</li>
+      </ul>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="card" id="contact">
+      <h2><span class="num">07</span> Contact</h2>
+      <p>
+        Questions about this policy or the terms? Write to
+        <a href="mailto:modiarunkumar.89@gmail.com">modiarunkumar.89@gmail.com</a>.
+      </p>
+      <nav class="social-links" aria-label="Connect with the developer">
+        <a href="https://github.com/Premkumar-ji" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/prem-kumar-modi-b8291a257/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:modiarunkumar.89@gmail.com">Email</a>
+      </nav>
+      <div class="cta-row">
+        <a class="cta" href="index.html">▶ Back to the game</a>
+        <a class="cta-ghost" href="about.html">Read the About page</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>© <span id="year">2025</span> Wordwave · Created by <strong>Prem Kumar Modi</strong></span>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="index.html">Play</a>
+      <a href="about.html">About</a>
+      <a href="privacy.html" aria-current="page">Privacy &amp; Terms</a>
+    </nav>
+  </footer>
+
+</div>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

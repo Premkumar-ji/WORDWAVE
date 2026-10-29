@@ -63,7 +63,12 @@
                         <button class="button button-secondary" type="button" data-action="stats">My stats</button>
                         <button class="button button-text" type="button" data-action="custom">Use your own words</button>
                     </div>
-                    <p class="control-hint">Type the first letter of a target to lock on, then finish the word.<br> Space pauses or resumes (double Space returns home); Ctrl opens Settings; Ctrl+H returns home; Ctrl+Alt+C opens Customize spaceship.</p>
+                    <p class="control-hint">Type the first letter of a target to lock on, then finish the word.</p>
+                    <nav class="info-links" aria-label="Game information">
+                        <button class="button button-text info-link" type="button" data-action="info" data-info-page="about.html">About</button>
+                        <button class="button button-text info-link" type="button" data-action="info" data-info-page="privacy.html">Privacy</button>
+                        <button class="button button-text info-link" type="button" data-action="info" data-info-page="controls.html">Controls</button>
+                    </nav>
                 </div>
             </section>
 
@@ -78,6 +83,7 @@
 
             <section id="shipsScreen" class="screen modal-screen" aria-labelledby="shipsTitle" hidden>
                 <div class="panel ship-panel">
+                    <button class="icon-button panel-close" type="button" data-action="close-screen" aria-label="Close spaceship settings">&times;</button>
                     <p class="eyebrow">MAKE IT YOURS</p>
                     <h2 id="shipsTitle">Choose your ship</h2>
                     <p class="panel-copy">Your selection is saved for your next flight.</p>
@@ -160,6 +166,7 @@
 
             <section id="pauseScreen" class="screen modal-screen" aria-labelledby="pauseTitle" hidden>
                 <div class="panel">
+                    <button class="icon-button panel-close" type="button" data-action="close-screen" aria-label="Close pause menu">&times;</button>
                     <p class="eyebrow">TAKE A BREATH</p>
                     <h2 id="pauseTitle">Game paused</h2>
                     <p class="panel-copy">Your wave is waiting.</p>
@@ -172,6 +179,7 @@
 
             <section id="settingsScreen" class="screen modal-screen" aria-labelledby="settingsTitle" hidden>
                 <div class="panel">
+                    <button class="icon-button panel-close" type="button" data-action="close-screen" aria-label="Close settings">&times;</button>
                     <p class="eyebrow">TUNE YOUR FLIGHT</p>
                     <h2 id="settingsTitle">Settings</h2>
                     <label class="setting-control" for="masterVolume">
@@ -239,6 +247,7 @@
 
             <section id="statsScreen" class="screen modal-screen" aria-labelledby="statsTitle" hidden>
                 <div class="panel">
+                    <button class="icon-button panel-close" type="button" data-action="close-screen" aria-label="Close statistics">&times;</button>
                     <p class="eyebrow">YOUR FLIGHT RECORD</p>
                     <h2 id="statsTitle">My stats</h2>
                     <dl class="stats-list">
@@ -254,6 +263,7 @@
 
             <section id="customScreen" class="screen modal-screen" aria-labelledby="customTitle" hidden>
                 <div class="panel">
+                    <button class="icon-button panel-close" type="button" data-action="close-screen" aria-label="Close custom word list">&times;</button>
                     <p class="eyebrow">MAKE IT YOURS</p>
                     <h2 id="customTitle">Your word list</h2>
                     <label class="custom-label" for="customWords">Enter words separated by spaces or new lines.</label>
@@ -268,6 +278,7 @@
 
             <section id="gameOverScreen" class="screen modal-screen" aria-labelledby="gameOverTitle" hidden>
                 <div class="panel game-over-panel">
+                    <button class="icon-button panel-close" type="button" data-action="close-screen" aria-label="Close game over screen">&times;</button>
                     <p class="eyebrow">FLIGHT COMPLETE</p>
                     <h2 id="gameOverTitle">Game over</h2>
                     <div class="result-grid">
@@ -286,6 +297,13 @@
 
             <section id="gameKeyboard" class="game-keyboard" aria-label="Game keyboard" hidden></section>
         </section>
+        <dialog id="infoDialog" class="info-dialog" aria-label="Wordwave information">
+            <header class="info-dialog-header">
+                <span id="infoDialogTitle">Wordwave information</span>
+                <button class="icon-button" type="button" data-action="close-info" aria-label="Close information">&times;</button>
+            </header>
+            <iframe id="infoFrame" title="Wordwave information page"></iframe>
+        </dialog>
     </main>
     <script src="index.js"></script>
 </body>
